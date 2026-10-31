@@ -21,7 +21,7 @@ public abstract class Carta implements Cloneable{
     }
     
     public void mostrar(){
-        this.descubierta = false;
+        this.descubierta = true;
     }
     
     public void ocultar(){
@@ -36,6 +36,12 @@ public abstract class Carta implements Cloneable{
     public boolean isEmparejada(){
         return emparejada;
     }
+    
+    public void marcarEmparejada(){
+    this.emparejada = true;
+    this.descubierta = true;
+    }
+    
     public void setEmparejada(boolean emparejada){
         this.emparejada = emparejada;
     }
@@ -50,6 +56,5 @@ public abstract class Carta implements Cloneable{
         }catch(CloneNotSupportedException e ){
             return null;
         }
-    }
-            
+    }      
 }
