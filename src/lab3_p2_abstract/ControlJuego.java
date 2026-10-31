@@ -1,4 +1,3 @@
-
 package lab3_p2_abstract;
 
 public abstract class ControlJuego {
