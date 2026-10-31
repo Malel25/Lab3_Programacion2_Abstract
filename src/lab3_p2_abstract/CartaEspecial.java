@@ -10,4 +10,13 @@ package lab3_p2_abstract;
  */
 public class CartaEspecial extends Carta {
     
+    public CartaEspecial(String nombrePokemon){
+        super(nombrePokemon);
+        
+    }
+    
+    @Override
+    public int getPuntos(){
+        return 2;
+    }
 }
