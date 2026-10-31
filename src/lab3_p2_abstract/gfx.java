@@ -23,6 +23,7 @@ public class gfx extends javax.swing.JFrame {
     
     public gfx() {
         initComponents();
+        configVentana();
     }
     
     private void configVentana(){
@@ -34,6 +35,17 @@ public class gfx extends javax.swing.JFrame {
         
         pantallaInicial();
         pantallaJuego();
+        
+        panelPrincipal.add(panelInicio,"INICIO");
+        panelPrincipal.add(panelJuego,"Juego");
+        
+        getContentPane().setLayout(new BorderLayout());
+        getContentPane().add(panelPrincipal, BorderLayout.CENTER);
+        
+        cartas.show(panelPrincipal,"INICIO");
+        
+        pack();
+        setLocationRelativeTo(null);
     }
     
     private void pantallaInicial(){
@@ -89,6 +101,44 @@ public class gfx extends javax.swing.JFrame {
     private void pantallaJuego(){
         panelJuego = new JPanel(new BorderLayout(10,10));
         panelJuego.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+        
+        JPanel panelSuperior = new JPanel(new GridLayout(1,3,10,10));
+        lblPuntaje1 = new JLabel("Jugador 1: 0 pts",JLabel.CENTER);
+        lblPuntaje1.setFont(new Font("Arial",Font.BOLD, 13));
+        
+        lblTurno = new JLabel("Turno: Jugador 1",JLabel.CENTER);
+        lblTurno.setFont(new Font("Arial", Font.BOLD, 15));
+        lblTurno.setForeground(new Color(0,102,204));
+        
+        lblPuntaje2 = new JLabel("Jugador 2: 0 pts",JLabel.CENTER);
+        lblPuntaje2.setFont(new Font("Arial",Font.BOLD, 13));
+
+        panelSuperior.add(lblPuntaje1);
+        panelSuperior.add(lblTurno);
+        panelSuperior.add(lblPuntaje2);
+        panelJuego.add(panelSuperior, BorderLayout.NORTH);
+        
+        JPanel panelTablero = new JPanel(new GridLayout(6, 6, 6, 6));
+        botonesTablero = new JButton[6][6];
+
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                JButton btn = new JButton("?");
+                btn.setFont(new Font("Arial", Font.BOLD, 14));
+                final int fila = i;
+                final int col = j;
+                
+                // Evento de clic en cada carta del tablero
+                btn.addActionListener(e -> {
+                    // Aquí conectarás posteriormente la lógica de tu clase de control (Integrante 2)
+                    JOptionPane.showMessageDialog(this, "Seleccionaste la carta en la posicion: [" + fila + "][" + col + "]");
+                });
+                
+                botonesTablero[i][j] = btn;
+                panelTablero.add(btn);
+            }
+        }
+        panelJuego.add(panelTablero, BorderLayout.CENTER);
     }
     /**
      * This method is called from within the constructor to initialize the form.
