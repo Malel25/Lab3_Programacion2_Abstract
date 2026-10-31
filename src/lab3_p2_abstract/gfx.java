@@ -1,24 +1,95 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-package lab3_p2_abstract;
 
-/**
- *
- * @author malel
- */
+package lab3_p2_abstract;
+import javax.swing.*;
+import java.awt.*;
+
 public class gfx extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(gfx.class.getName());
-
-    /**
-     * Creates new form gfx
-     */
+    private CardLayout cartas;
+    private JPanel panelPrincipal;
+    
+    private JPanel panelInicio;
+    private JTextField txtJugador1;
+    private JTextField txtJugador2;
+    private JButton btnIniciar;
+    
+    private JPanel panelJuego;
+    private JLabel lblTurno;
+    private JLabel lblPuntaje1;
+    private JLabel lblPuntaje2;
+    private JButton[][] botonesTablero;
+    
+    
     public gfx() {
         initComponents();
     }
+    
+    private void configVentana(){
+        setTitle("Juego de Memoria Pokemon");
+        setPreferredSize(new Dimension(750,700));
+        
+        cartas = new CardLayout();
+        panelPrincipal = new JPanel(cartas);
+        
+        pantallaInicial();
+        pantallaJuego();
+    }
+    
+    private void pantallaInicial(){
+        panelInicio = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10,10,10,10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        JLabel lblTitulo = new JLabel("JUEGO DE MEMORIA POKEMON", JLabel.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
+
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        panelInicio.add(lblTitulo,gbc);
+        
+        gbc.gridwidth = 1; gbc.gridy = 1; gbc.gridx = 0;
+        panelInicio.add(new JLabel("Nombre Jugador 1:"),gbc);
+        txtJugador1 = new JTextField(15);
+        gbc.gridx = 1;
+        panelInicio.add(txtJugador1, gbc);
+        
+        gbc.gridy = 2; gbc.gridx = 0;
+        panelInicio.add(new JLabel("Nombre Jugador 2:"), gbc);
+        txtJugador2 = new JTextField(15);
+        gbc.gridx = 1;
+        panelInicio.add(txtJugador2, gbc);
+
+        btnIniciar = new JButton("Iniciar Partida");
+        btnIniciar.setFont(new Font("Arial", Font.BOLD, 14));
+        gbc.gridy = 3; gbc.gridx = 0; gbc.gridwidth = 2;
+        panelInicio.add(btnIniciar, gbc);
+        
+        btnIniciar.addActionListener(e -> {
+            String p1 = txtJugador1.getText().trim();
+            String p2 = txtJugador2.getText().trim();
+            
+            if (p1.isEmpty() || p2.isEmpty()){
+                JOptionPane.showMessageDialog(this,"Los nombres de los jugadores no pueden estar vacios...", "Error de Validacion", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (p1.equalsIgnoreCase(p2)){
+                JOptionPane.showMessageDialog(this, "Los nombres de los jugadores deben ser diferentes.", "Error de Validacion", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            lblPuntaje1.setText(p1+": 0 pts");
+            lblPuntaje2.setText(p2+": 0 pts");
+            lblTurno.setText("Turno: "+p1);
+            
+            cartas.show(panelPrincipal, "JUEGO");
+        });
+    }
+    
+    private void pantallaJuego(){
+        panelJuego = new JPanel(new BorderLayout(10,10));
+        panelJuego.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
