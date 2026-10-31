@@ -9,5 +9,11 @@ package lab3_p2_abstract;
  * @author ANGILI PALACIOS
  */
 public class CartaEstandar extends Carta {
-    
+    public CartaEstandar(String nombrePokemon){
+        super(nombrePokemon);
+    }
+    @Override
+    public int getPuntos() {
+        return 1;
+    }
 }
