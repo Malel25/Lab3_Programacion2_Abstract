@@ -36,5 +36,20 @@ public abstract class Carta implements Cloneable{
     public boolean isEmparejada(){
         return emparejada;
     }
+    public void setEmparejada(boolean emparejada){
+        this.emparejada = emparejada;
+    }
+    public String getnombrePokemon(){
+        return nombrePokemon;
+    }
+    public abstract int getPuntos();
+    @Override
+    public Object clone(){
+        try{
+            return super.clone();
+        }catch(CloneNotSupportedException e ){
+            return null;
+        }
+    }
             
 }
