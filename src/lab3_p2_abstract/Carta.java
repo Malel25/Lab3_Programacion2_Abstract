@@ -9,5 +9,15 @@ package lab3_p2_abstract;
  * @author ANGILI PALACIOS
  */
 public abstract class Carta implements Cloneable{
+    protected boolean descubierta;
+    protected boolean emparejada;
+    protected String nombrePokemon;
     
+    
+    public Carta(String nombrePokemon){
+        this.nombrePokemon = nombrePokemon;
+        this.descubierta= false;
+        this.emparejada = false;
+    }
+            
 }
