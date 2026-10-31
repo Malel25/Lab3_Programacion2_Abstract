@@ -21,7 +21,13 @@ public class gfx extends javax.swing.JFrame {
     private JButton[][] botonesTablero;
     
     
+    private ControlMemoria control;
+    private int primerFila = -1, primerCol = -1;
+    private boolean esperandoSegundaCarta = false;
+    private boolean bloqueadoPorPausa = false;
+    
     public gfx() {
+        control = new ControlMemoria();
         initComponents();
         configVentana();
     }
@@ -37,7 +43,7 @@ public class gfx extends javax.swing.JFrame {
         pantallaJuego();
         
         panelPrincipal.add(panelInicio,"INICIO");
-        panelPrincipal.add(panelJuego,"Juego");
+        panelPrincipal.add(panelJuego,"JUEGO");
         
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(panelPrincipal, BorderLayout.CENTER);
@@ -90,9 +96,14 @@ public class gfx extends javax.swing.JFrame {
                 return;
             }
             
-            lblPuntaje1.setText(p1+": 0 pts");
-            lblPuntaje2.setText(p2+": 0 pts");
-            lblTurno.setText("Turno: "+p1);
+            control.iniciarJuego(p1, p2);
+            actualizarMarcadores();
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 6; j++) {
+                    botonesTablero[i][j].setText("?");
+                    botonesTablero[i][j].setEnabled(true);
+                }
+            }
             
             cartas.show(panelPrincipal, "JUEGO");
         });
@@ -128,10 +139,69 @@ public class gfx extends javax.swing.JFrame {
                 final int fila = i;
                 final int col = j;
                 
-                // Evento de clic en cada carta del tablero
+                
                 btn.addActionListener(e -> {
-                    // Aquí conectarás posteriormente la lógica de tu clase de control (Integrante 2)
-                    JOptionPane.showMessageDialog(this, "Seleccionaste la carta en la posicion: [" + fila + "][" + col + "]");
+                    if (bloqueadoPorPausa) {
+                        return;
+                    }
+                    Carta cartaActual = control.getCarta(fila,col);
+                    
+                    if (cartaActual.isDescubierta() || cartaActual.isEmparejada()){
+                        return;
+                    }
+                    if(!esperandoSegundaCarta){
+                        primerFila = fila;
+                        primerCol = col;
+                        cartaActual.mostrar();
+                        btn.setText(cartaActual.getnombrePokemon());
+                        esperandoSegundaCarta = true;
+                    } else {
+                        if (fila == primerFila && col == primerCol){
+                            return;
+                        }
+                        final int f1 = primerFila;
+                        final int c1 = primerCol;
+                        cartaActual.mostrar();
+                        btn.setText(cartaActual.getnombrePokemon());
+                        esperandoSegundaCarta=false;
+                        
+                        boolean acierto = control.verificarPareja(f1, c1, fila, col);
+                        if(acierto){
+                            actualizarMarcadores();
+                            if(control.finalizarPartida()){
+                                Jugador[] jrs = control.getJugadores();
+                                String mensaje = "¡Partida Finalizada!\n";
+                                if (jrs[0].getPuntaje() > jrs[1].getPuntaje()) {
+                                    mensaje += "Ganador: " + jrs[0].getNombre() + " con " + jrs[0].getPuntaje() + " puntos.";
+                                } else if (jrs[1].getPuntaje() > jrs[0].getPuntaje()) {
+                                    mensaje += "Ganador: " + jrs[1].getNombre() + " con " + jrs[1].getPuntaje() + " puntos.";
+                                } else {
+                                    mensaje += "Empate! Ambos obtuvieron " + jrs[0].getPuntaje() + " puntos.";
+                                }
+                                mensaje += "\n\n¿Deseas iniciar una nueva partida?";
+                                
+                                int opcion = JOptionPane.showConfirmDialog(this, mensaje, "Fin del Juego", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                                if (opcion == JOptionPane.YES_OPTION) {
+                                    cartas.show(panelPrincipal, "INICIO"); 
+                                }
+                            }
+                        } else {
+                            bloqueadoPorPausa = true;
+                            Timer timerPausa = new Timer(1000, ev -> {
+                                control.getCarta(f1, c1).ocultar();
+                                control.getCarta(fila, col).ocultar();
+                                
+                                botonesTablero[f1][c1].setText("?");
+                                botonesTablero[fila][col].setText("?");
+                                
+                                control.alternarTurno();
+                                actualizarMarcadores();
+                                bloqueadoPorPausa = false;
+                            });
+                            timerPausa.setRepeats(false);
+                            timerPausa.start();
+                        }
+                    }
                 });
                 
                 botonesTablero[i][j] = btn;
@@ -139,6 +209,13 @@ public class gfx extends javax.swing.JFrame {
             }
         }
         panelJuego.add(panelTablero, BorderLayout.CENTER);
+    }
+    
+    private void actualizarMarcadores() {
+        Jugador[] jrs = control.getJugadores();
+        lblPuntaje1.setText(jrs[0].getNombre() + ": " + jrs[0].getPuntaje() + " pts");
+        lblPuntaje2.setText(jrs[1].getNombre() + ": " + jrs[1].getPuntaje() + " pts");
+        lblTurno.setText("Turno: " + control.getJugadorActual().getNombre());
     }
     /**
      * This method is called from within the constructor to initialize the form.

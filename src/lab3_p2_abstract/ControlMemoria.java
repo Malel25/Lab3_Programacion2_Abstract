@@ -86,7 +86,7 @@ public class ControlMemoria extends ControlJuego {
             
             
             Jugador actual = jugadores[turnoActual];
-            actual.sumarAcierto(c1.getPuntos() + c2.getPuntos());
+            actual.sumarAcierto(c1.getPuntos());
             
             parejasEncontradas++;
             return true; 
