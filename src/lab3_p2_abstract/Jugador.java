@@ -19,4 +19,14 @@ public class Jugador {
        this.puntaje = 0;
        
    }
+   public String getNombre(){
+       return nombre;
+   }
+   
+   public int getAciertos(){
+       return aciertos;
+   }
+   public int getPuntaje(){
+       return puntaje;
+   }
 }
