@@ -29,4 +29,13 @@ public class Jugador {
    public int getPuntaje(){
        return puntaje;
    }
+   
+   public void sumarAcierto(int puntos){
+       this.aciertos++;
+       this.puntaje += puntos;
+   }
+   public void reiniciar(){
+       this.aciertos = 0;
+       this.puntaje = 0;
+   }
 }
