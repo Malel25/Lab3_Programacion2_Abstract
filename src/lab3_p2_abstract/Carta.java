@@ -19,5 +19,22 @@ public abstract class Carta implements Cloneable{
         this.descubierta= false;
         this.emparejada = false;
     }
+    
+    public void mostrar(){
+        this.descubierta = false;
+    }
+    
+    public void ocultar(){
+        if(!emparejada){
+            this.descubierta = false;
+        }
+    }
+    public boolean isDescubierta(){
+        return descubierta;
+    
+    }
+    public boolean isEmparejada(){
+        return emparejada;
+    }
             
 }
