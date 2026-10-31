@@ -13,12 +13,14 @@ public class gfx extends javax.swing.JFrame {
     private JTextField txtJugador1;
     private JTextField txtJugador2;
     private JButton btnIniciar;
+    private JButton btnSalirApp;
     
     private JPanel panelJuego;
     private JLabel lblTurno;
     private JLabel lblPuntaje1;
     private JLabel lblPuntaje2;
     private JButton[][] botonesTablero;
+    private JButton btnVolverMenu;
     
     
     private ControlMemoria control;
@@ -83,6 +85,13 @@ public class gfx extends javax.swing.JFrame {
         gbc.gridy = 3; gbc.gridx = 0; gbc.gridwidth = 2;
         panelInicio.add(btnIniciar, gbc);
         
+        btnSalirApp = new JButton("Salir");
+        btnSalirApp.setFont(new Font("Arial", Font.BOLD, 14));
+        btnSalirApp.setBackground(new Color(220, 80, 80));
+        btnSalirApp.setForeground(Color.WHITE);
+        gbc.gridy = 4; gbc.gridx = 0; gbc.gridwidth = 2;
+        panelInicio.add(btnSalirApp, gbc);
+        
         btnIniciar.addActionListener(e -> {
             String p1 = txtJugador1.getText().trim();
             String p2 = txtJugador2.getText().trim();
@@ -107,11 +116,25 @@ public class gfx extends javax.swing.JFrame {
             
             cartas.show(panelPrincipal, "JUEGO");
         });
+        
+        btnSalirApp.addActionListener(e -> {
+            int confirmacion = JOptionPane.showConfirmDialog(
+                this, 
+                "¿Estás seguro de que deseas cerrar el programa?", 
+                "Salir", 
+                JOptionPane.YES_NO_OPTION
+            );
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
+        });
     }
     
     private void pantallaJuego(){
         panelJuego = new JPanel(new BorderLayout(10,10));
         panelJuego.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+        
+        JPanel panelSuperiorC = new JPanel(new BorderLayout(10,10));
         
         JPanel panelSuperior = new JPanel(new GridLayout(1,3,10,10));
         lblPuntaje1 = new JLabel("Jugador 1: 0 pts",JLabel.CENTER);
@@ -127,7 +150,26 @@ public class gfx extends javax.swing.JFrame {
         panelSuperior.add(lblPuntaje1);
         panelSuperior.add(lblTurno);
         panelSuperior.add(lblPuntaje2);
-        panelJuego.add(panelSuperior, BorderLayout.NORTH);
+        
+        btnVolverMenu = new JButton("Volver al Menú");
+        btnVolverMenu.setFont(new Font("Arial", Font.BOLD, 11));
+        btnVolverMenu.addActionListener(e -> {
+            int confirmacion = JOptionPane.showConfirmDialog(
+                this, 
+                "¿Deseas volver al menú principal? Se perderá el progreso de la partida actual.", 
+                "Confirmar salida", 
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+            );
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                cartas.show(panelPrincipal, "INICIO");
+            }
+        });
+        
+        panelSuperiorC.add(panelSuperior, BorderLayout.CENTER);
+        panelSuperiorC.add(btnVolverMenu, BorderLayout.EAST);
+        
+        panelJuego.add(panelSuperiorC, BorderLayout.NORTH);
         
         JPanel panelTablero = new JPanel(new GridLayout(6, 6, 6, 6));
         botonesTablero = new JButton[6][6];
