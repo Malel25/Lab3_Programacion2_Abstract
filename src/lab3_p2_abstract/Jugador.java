@@ -9,5 +9,14 @@ package lab3_p2_abstract;
  * @author ANGILI PALACIOS
  */
 public class Jugador {
-    
+   private String nombre;
+   private int aciertos;
+   private int puntaje;
+   
+   public Jugador(String nombre){
+       this.nombre = nombre;
+       this.aciertos = 0;
+       this.puntaje = 0;
+       
+   }
 }
